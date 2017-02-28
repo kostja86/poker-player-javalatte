@@ -42,13 +42,16 @@ public class Player {
 		
 //		System.err.println("betRequest: " + request.toString());
 //		System.out.println("betRequest: " + request.toString());
-		
+		if (maxBet >= 500) {
+			return 500;
+		}
 		return maxBet++;
 	}
 
 	/**
 	 * showdown:
-	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54bb580f878000400003f","round":21,"players":[{"name":"PokerFarce","stack":936,"status":"folded","bet":0,"time_used":349441,"version":"Default
+	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54bb580f878000400003f","round":21,
+	 * "players":[{"name":"PokerFarce","stack":936,"status":"folded","bet":0,"time_used":349441,"version":"Default
 	 * TypeScript folding
 	 * player","id":0},{"name":"JavaLatte","stack":0,"status":"out","bet":0,"hole_cards":[],"time_used":87233,"version":"Default
 	 * Java folding player","id":1},{"name":"Java Master Race
@@ -58,7 +61,8 @@ public class Player {
 	 * C# folding player","id":3},{"name":"still mono
 	 * noobs","stack":0,"status":"out","bet":0,"time_used":31780,"version":"Default
 	 * C# folding
-	 * player","id":4}],"small_blind":5,"big_blind":10,"orbits":4,"dealer":3,"community_cards":[{"rank":"6","suit":"clubs"},{"rank":"3","suit":"spades"},{"rank":"K","suit":"clubs"},{"rank":"9","suit":"clubs"},{"rank":"9","suit":"hearts"}],"current_buy_in":0,"pot":0}
+	 * player","id":4}],
+	 * "small_blind":5,"big_blind":10,"orbits":4,"dealer":3,"community_cards":[{"rank":"6","suit":"clubs"},{"rank":"3","suit":"spades"},{"rank":"K","suit":"clubs"},{"rank":"9","suit":"clubs"},{"rank":"9","suit":"hearts"}],"current_buy_in":0,"pot":0}
 	 * 
 	 * @param game
 	 */
