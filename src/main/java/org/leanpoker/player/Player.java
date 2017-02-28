@@ -48,6 +48,7 @@ public class Player {
 		holeCards = new ArrayList<>();
 		setMaxBetAndActualStack(players);
 		setHoleCards(players);
+		communityCards = new ArrayList<>();
 		
 		setCommunityCards(jObj.get("community_cards").getAsJsonArray());
 		
