@@ -45,8 +45,8 @@ public class Player {
 //		System.err.println("betRequest: " + request.toString());
 //		System.out.println("betRequest: " + request.toString());
 		
-		if (maxBet >= 250) {
-			return 250;
+		if (maxBet >= 50) {
+			return 50;
 		}
 		maxBet += 2;
 		return maxBet;
