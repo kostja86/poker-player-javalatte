@@ -22,7 +22,7 @@ public class PlayerTest {
 //		JsonArray jsonArray;
 //		JsonObject obj = request.getAsJsonObject();
 //		JsonArray results = obj.getAsJsonArray("players");
-//		for (JsonObject result : results.) {
+//		for (JsonObject result : results.) {ss
 //			
 //		}
 		System.out.println(jsonElement.isJsonObject());
