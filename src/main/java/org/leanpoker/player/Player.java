@@ -1,5 +1,9 @@
 package org.leanpoker.player;
 
+import java.util.HashMap;
+
+import org.leanpoker.player.JsonPlayer;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,6 +11,11 @@ import com.google.gson.JsonObject;
 public class Player {
 
 	static final String VERSION = "Default Java folding player";
+	static HashMap<String, HashMap<String, JsonPlayer>> mapGameToPlayers;
+	
+	static int maxBet = 0;
+	static int stack = 1000;
+	static final String teamName = "JavaLatte";
 
 	/**
 	 * betRequest:
@@ -30,23 +39,30 @@ public class Player {
 	public static int betRequest(JsonElement request) {
 		JsonObject jObj = request.getAsJsonObject();
 		JsonArray players = jObj.get("players").getAsJsonArray();
-		int maxBet = 0;
-		for(int i = 0; i < players.size(); i++) {
-			JsonElement plEl = players.get(i);
-			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
-			if (actualBet > maxBet) {
-				maxBet = actualBet;
-			}
-		}
+		setMaxBetAndActualStack(players);
 		
 		
 //		System.err.println("betRequest: " + request.toString());
 //		System.out.println("betRequest: " + request.toString());
-		if (maxBet >= 500) {
-			return 500;
+		
+		if (maxBet >= 250) {
+			return 250;
 		}
 		maxBet += 2;
 		return maxBet;
+	}
+
+	private static void setMaxBetAndActualStack(JsonArray players) {
+		for(int i = 0; i < players.size(); i++) {
+			JsonElement plEl = players.get(i);
+			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
+			if (teamName.equals(plEl.getAsJsonObject().get("name").getAsString())) {
+				stack = plEl.getAsJsonObject().get("stack").getAsInt();
+			}
+			if (actualBet > maxBet) {
+				maxBet = actualBet;
+			}
+		}
 	}
 
 	/**
@@ -68,14 +84,6 @@ public class Player {
 	 * @param game
 	 */
 	public static void showdown(JsonElement game) {
-		JsonArray jsonArray;
-		if (game.isJsonArray()) {
-			jsonArray = game.getAsJsonArray();
-			for (int i = 0; i < jsonArray.size(); i++) {
-				System.out.println("game: " + i + ": " + jsonArray.get(i).toString());
-				System.err.println("game: " + i + ": " + jsonArray.get(i).toString());
-			}
-		}
 
 		System.err.println("showdown: " + game.toString());
 		System.out.println("showdown: " + game.toString());
