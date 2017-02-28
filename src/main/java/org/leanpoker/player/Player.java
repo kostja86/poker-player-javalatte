@@ -48,7 +48,7 @@ public class Player {
 //		if (maxBet >= 50) {
 //			return 50;
 //		}
-		maxBet += 2;
+//		maxBet += 2;
 		return maxBet;
 	}
 
