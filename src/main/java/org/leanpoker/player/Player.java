@@ -66,7 +66,7 @@ public class Player {
 		
 		boolean hasMatch = false;
 		
-		if (hasPair() || hasHighCard() || hasAtLeastOnePair() || (numberOfEqualSuits > 5)) {
+		if (hasPair() || hasHighCard() || (hasAtLeastOnePair() && hasPair()) || (numberOfEqualSuits > 5)) {
 			hasMatch = true;
 			bet = maxBet;
 			if (numberOfMatches > 2) {
@@ -111,13 +111,13 @@ public class Player {
 		allCards.addAll(holeCards);
 		allCards.addAll(communityCards);
 		
-		for (int i = 0; i < allCards.size(); i++) {
-			for (int j = 0; j < allCards.size(); j++) {
-				if (i != j && allCards.get(i).equals(allCards.get(j))) {
+		for (int i = 0; i < holeCards.size(); i++) {
+			for (int j = 0; j < communityCards.size(); j++) {
+				if (holeCards.get(i).equals(communityCards.get(j))) {
 					numberOfMatches++;
 				}
 
-				if (i != j && allCards.get(i).getCardSuit().equals(allCards.get(j).getCardSuit())) {
+				if (holeCards.get(i).getCardSuit().equals(communityCards.get(j).getCardSuit())) {
 					numberOfEqualSuits++;
 				}
 			}
