@@ -208,7 +208,7 @@ public class Player {
 	 */
 	public static void showdown(JsonElement game) {
 
-		System.err.println("showdown: " + game.toString());
-		System.out.println("showdown: " + game.toString());
+//		System.err.println("showdown: " + game.toString());
+//		System.out.println("showdown: " + game.toString());
 	}
 }
