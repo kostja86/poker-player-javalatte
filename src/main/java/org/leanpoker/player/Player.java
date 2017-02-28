@@ -1,10 +1,12 @@
 package org.leanpoker.player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.leanpoker.player.JsonPlayer;
 import org.leanpoker.player.PlayingCard;
+import org.leanpoker.player.JsonCard;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,8 +15,9 @@ import com.google.gson.JsonObject;
 public class Player {
 
 	static final String VERSION = "Default Java folding player";
-	static HashMap<String, HashMap<String, JsonPlayer>> mapGameToPlayers;
-	static List<PlayingCard> holeCards;
+
+	static List<JsonCard> holeCards;
+	static List<JsonCard> communityCards;
 	
 	static int maxBet = 0;
 	static int stack = 1000;
@@ -42,7 +45,9 @@ public class Player {
 	public static int betRequest(JsonElement request) {
 		JsonObject jObj = request.getAsJsonObject();
 		JsonArray players = jObj.get("players").getAsJsonArray();
+		holeCards = new ArrayList<>();
 		setMaxBetAndActualStack(players);
+		setHoleCards(players);
 		
 		
 //		System.err.println("betRequest: " + request.toString());
@@ -52,18 +57,44 @@ public class Player {
 //			return 50;
 //		}
 //		maxBet += 2;
-		if (maxBet > 25) {
-			return 25;
+		if (hasPair()) {
+			return maxBet;
 		}
-		return maxBet;
+		return 0;
 	}
-
+	
+	private static boolean hasPair() {
+		return holeCards.get(0).equals(holeCards.get(1));
+	}
+	
 	private static void setMaxBetAndActualStack(JsonArray players) {
 		for(int i = 0; i < players.size(); i++) {
 			JsonElement plEl = players.get(i);
 			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
 			if (teamName.equals(plEl.getAsJsonObject().get("name").getAsString())) {
 				stack = plEl.getAsJsonObject().get("stack").getAsInt();
+			}
+			if (actualBet > maxBet) {
+				maxBet = actualBet;
+			}
+		}
+	}
+
+	private static void setHoleCards(JsonArray players) {
+		for(int i = 0; i < players.size(); i++) {
+			JsonElement plEl = players.get(i);
+			 
+			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
+			if (teamName.equals(plEl.getAsJsonObject().get("name").getAsString())) {
+				JsonArray jsonHoleCards = plEl.getAsJsonObject().get("hole_cards").getAsJsonArray();
+				// "hole_cards":[{"rank":"8","suit":"hearts"},{"rank":"4","suit":"hearts"}]
+				for (int j = 0; j < jsonHoleCards.size(); j++) {
+					JsonElement hlEl = jsonHoleCards.get(j);
+					String rank = hlEl.getAsJsonObject().get("rank").getAsString();
+					String suit = hlEl.getAsJsonObject().get("suit").getAsString();
+					holeCards.add(new JsonCard(rank, suit));
+				}
+				
 			}
 			if (actualBet > maxBet) {
 				maxBet = actualBet;
