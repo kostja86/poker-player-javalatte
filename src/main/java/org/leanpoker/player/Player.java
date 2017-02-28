@@ -25,12 +25,16 @@ public class Player {
 	 * @return
 	 */
 	public static int betRequest(JsonElement request) {
-//		JsonArray jsonArray = request.getAsJsonArray();
-//		jsonArray.
+//		JsonArray jsonArray;
+//		if (request.isJsonArray()) {
+//			jsonArray = request.getAsJsonArray();
+//		}
+		
+		
 		System.err.println("betRequest: " + request.toString());
 		System.out.println("betRequest: " + request.toString());
 		
-		return 300;
+		return 1000;
 	}
 
 	/**
