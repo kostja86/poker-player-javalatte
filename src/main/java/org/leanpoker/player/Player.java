@@ -49,6 +49,9 @@ public class Player {
 		setMaxBetAndActualStack(players);
 		setHoleCards(players);
 		
+		setCommunityCards(jObj.get("community_cards").getAsJsonArray());
+		
+		
 		
 //		System.err.println("betRequest: " + request.toString());
 //		System.out.println("betRequest: " + request.toString());
@@ -57,7 +60,7 @@ public class Player {
 //			return 50;
 //		}
 //		maxBet += 2;
-		if (hasPair()) {
+		if (hasPair() || hasHighCard()) {
 			return maxBet;
 		}
 		return 0;
@@ -65,6 +68,24 @@ public class Player {
 	
 	private static boolean hasPair() {
 		return holeCards.get(0).equals(holeCards.get(1));
+	}
+	
+	private static boolean hasHighCard() {
+		for (JsonCard holeCard : holeCards) {
+			if (holeCard.getPlayingCard().equals(PlayingCard.ASS)) {
+				return true;
+			}
+			if (holeCard.getPlayingCard().equals(PlayingCard.KING)) {
+				return true;
+			}
+			if (holeCard.getPlayingCard().equals(PlayingCard.QUEEN)) {
+				return true;
+			}
+			if (holeCard.getPlayingCard().equals(PlayingCard.JACK)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private static void setMaxBetAndActualStack(JsonArray players) {
@@ -83,8 +104,6 @@ public class Player {
 	private static void setHoleCards(JsonArray players) {
 		for(int i = 0; i < players.size(); i++) {
 			JsonElement plEl = players.get(i);
-			 
-			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
 			if (teamName.equals(plEl.getAsJsonObject().get("name").getAsString())) {
 				JsonArray jsonHoleCards = plEl.getAsJsonObject().get("hole_cards").getAsJsonArray();
 				// "hole_cards":[{"rank":"8","suit":"hearts"},{"rank":"4","suit":"hearts"}]
@@ -92,13 +111,23 @@ public class Player {
 					JsonElement hlEl = jsonHoleCards.get(j);
 					String rank = hlEl.getAsJsonObject().get("rank").getAsString();
 					String suit = hlEl.getAsJsonObject().get("suit").getAsString();
+					System.out.println("hlEl " + i + ": " + hlEl);
 					holeCards.add(new JsonCard(rank, suit));
 				}
 				
 			}
-			if (actualBet > maxBet) {
-				maxBet = actualBet;
-			}
+		}
+	}
+	
+	// "community_cards":[{"rank":"6","suit":"clubs"},{"rank":"3","suit":"spades"},{"rank":"K","suit":"clubs"},{"rank":"9","suit":"clubs"},{"rank":"9","suit":"hearts"}]
+	private static void setCommunityCards(JsonArray jsonCommunityCards) {
+		System.out.println("jsonCommunityCards.size(): " + jsonCommunityCards.size());
+		for(int i = 0; i < jsonCommunityCards.size(); i++) {
+			JsonElement cCardEl = jsonCommunityCards.get(i);
+			String rank = cCardEl.getAsJsonObject().get("rank").getAsString();
+			String suit = cCardEl.getAsJsonObject().get("suit").getAsString();
+			System.out.println("cCardEl " + i + ": " + cCardEl);
+			communityCards.add(new JsonCard(rank, suit));
 		}
 	}
 
