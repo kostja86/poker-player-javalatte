@@ -9,9 +9,11 @@ public class Player {
 
 	/**
 	 * betRequest:
-	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54b8d80f878000400003e","round":41,"players":[{"name":"PokerFarce","stack":782,"status":"folded","bet":0,"time_used":687524,"version":"Default
-	 * TypeScript folding
-	 * player","id":0},{"name":"JavaLatte","stack":1405,"status":"active","bet":15,"hole_cards":[{"rank":"8","suit":"hearts"},{"rank":"4","suit":"hearts"}],"time_used":546141,"version":"Default
+	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54b8d80f878000400003e","round":41,
+	 * "players":
+	 * [{"name":"PokerFarce","stack":782,"status":"folded","bet":0,"time_used":687524,"version":"Default
+	 * TypeScript foldingplayer","id":0},
+	 * {"name":"JavaLatte","stack":1405,"status":"active","bet":15,"hole_cards":[{"rank":"8","suit":"hearts"},{"rank":"4","suit":"hearts"}],"time_used":546141,"version":"Default
 	 * Java folding player","id":1},{"name":"Java Master Race
 	 * Maybe","stack":0,"status":"out","bet":0,"time_used":20057,"version":"Default
 	 * Java folding
@@ -25,10 +27,14 @@ public class Player {
 	 * @return
 	 */
 	public static int betRequest(JsonElement request) {
-//		JsonArray jsonArray;
-//		if (request.isJsonArray()) {
-//			jsonArray = request.getAsJsonArray();
-//		}
+		JsonArray jsonArray;
+		if (request.isJsonArray()) {
+			jsonArray = request.getAsJsonArray();
+			for (int i = 0; i < jsonArray.size(); i++) {
+				System.out.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
+				System.err.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
+			}
+		}
 		
 		
 		System.err.println("betRequest: " + request.toString());
@@ -54,6 +60,14 @@ public class Player {
 	 * @param game
 	 */
 	public static void showdown(JsonElement game) {
+		JsonArray jsonArray;
+		if (game.isJsonArray()) {
+			jsonArray = game.getAsJsonArray();
+			for (int i = 0; i < jsonArray.size(); i++) {
+				System.out.println("game: " + i + ": " + jsonArray.get(i).toString());
+				System.err.println("game: " + i + ": " + jsonArray.get(i).toString());
+			}
+		}
 
 		System.err.println("showdown: " + game.toString());
 		System.out.println("showdown: " + game.toString());
