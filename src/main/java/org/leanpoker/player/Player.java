@@ -66,7 +66,7 @@ public class Player {
 		
 		boolean hasMatch = false;
 		
-		if (hasPair() || hasHighCard() || (hasAtLeastOnePair() && hasPair()) || (numberOfEqualSuits > 5)) {
+		if (hasPair() || hasHighCard() || hasAtLeastOnePair() || (numberOfEqualSuits > 5)) {
 			hasMatch = true;
 			bet = maxBet;
 			if (numberOfMatches > 2) {
