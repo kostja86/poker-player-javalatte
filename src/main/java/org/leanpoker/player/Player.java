@@ -2,6 +2,7 @@ package org.leanpoker.player;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class Player {
 
@@ -27,20 +28,22 @@ public class Player {
 	 * @return
 	 */
 	public static int betRequest(JsonElement request) {
-		JsonArray jsonArray;
-		if (request.isJsonArray()) {
-			jsonArray = request.getAsJsonArray();
-			for (int i = 0; i < jsonArray.size(); i++) {
-				System.out.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
-				System.err.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
+		JsonObject jObj = request.getAsJsonObject();
+		JsonArray players = jObj.get("players").getAsJsonArray();
+		int maxBet = 0;
+		for(int i = 0; i < players.size(); i++) {
+			JsonElement plEl = players.get(i);
+			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
+			if (actualBet > maxBet) {
+				maxBet = actualBet;
 			}
 		}
 		
 		
-		System.err.println("betRequest: " + request.toString());
-		System.out.println("betRequest: " + request.toString());
+//		System.err.println("betRequest: " + request.toString());
+//		System.out.println("betRequest: " + request.toString());
 		
-		return 350;
+		return maxBet++;
 	}
 
 	/**
