@@ -21,6 +21,8 @@ public class Player {
 	
 	static int maxBet = 0;
 	static int stack = 1000;
+	static  int numberOfMatches = 0;
+	static int numberOfEqualSuits = 0;
 	static final String teamName = "JavaLatte";
 
 	/**
@@ -56,23 +58,41 @@ public class Player {
 		
 		int numberOfCards = holeCards.size() + communityCards.size();
 		boolean flopPlayed = numberOfCards > 2;
+		boolean turnPlayed = numberOfCards > 5;
+		boolean riverPlayed = numberOfCards > 6;
+		
 		
 		int bet = 0;
 		
 		boolean hasMatch = false;
-		if (hasPair() || hasHighCard() || hasAtLeastOnePair()) {
+		
+		if (hasPair() || hasHighCard() || hasAtLeastOnePair() || (numberOfEqualSuits > 5)) {
 			hasMatch = true;
 			bet = maxBet;
+			if (numberOfMatches > 2) {
+				bet += getMaxAvailableRaise();
+			}
+			if (numberOfEqualSuits > 5) {
+				bet += getMaxAvailableRaise();
+			}
 		}
 		
 		if (!hasMatch && !flopPlayed) {
-			bet = getBet(0.1);
+			bet = getCallBet(0.1);
 		}
 		
 		return bet;
 	}
 	
-	private static int getBet(double factor) {
+	private static int getMaxAvailableRaise() {
+		int availableRaise = stack - maxBet;
+		if (availableRaise < 0) {
+			return 0;
+		}
+		return availableRaise;
+	}
+
+	private static int getCallBet(double factor) {
 		int bet = (int) (stack * 0.1);
 		if (stack * factor >= maxBet) {
 			bet = maxBet;
@@ -85,16 +105,20 @@ public class Player {
 	}
 	
 	private static boolean hasAtLeastOnePair() {
+		numberOfMatches = 0;
+		numberOfEqualSuits = 0;
 		List<JsonCard> allCards = new ArrayList<>();
 		allCards.addAll(holeCards);
 		allCards.addAll(communityCards);
-		
-		int numberOfMatches = 0;
 		
 		for (int i = 0; i < allCards.size(); i++) {
 			for (int j = 0; j < allCards.size(); j++) {
 				if (i != j && allCards.get(i).equals(allCards.get(j))) {
 					numberOfMatches++;
+				}
+
+				if (i != j && allCards.get(i).getCardSuit().equals(allCards.get(j).getCardSuit())) {
+					numberOfEqualSuits++;
 				}
 			}
 		}
@@ -119,6 +143,7 @@ public class Player {
 		}
 		return false;
 	}
+
 	
 	private static void setMaxBetAndActualStack(JsonArray players) {
 		for(int i = 0; i < players.size(); i++) {

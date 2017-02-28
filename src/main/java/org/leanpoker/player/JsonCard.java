@@ -31,9 +31,6 @@ public class JsonCard {
 		if (this.playingCard.equals(((JsonCard) playingCard).getPlayingCard())) {
 			return true;
 		}
-		if (this.cardSuit.equals(((JsonCard) playingCard).getCardSuit())) {
-			return true;
-		}
 		return false;
 	}
 	
