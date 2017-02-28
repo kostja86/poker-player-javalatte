@@ -1,8 +1,10 @@
 package org.leanpoker.player;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.leanpoker.player.JsonPlayer;
+import org.leanpoker.player.PlayingCard;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,6 +14,7 @@ public class Player {
 
 	static final String VERSION = "Default Java folding player";
 	static HashMap<String, HashMap<String, JsonPlayer>> mapGameToPlayers;
+	static List<PlayingCard> holeCards;
 	
 	static int maxBet = 0;
 	static int stack = 1000;
@@ -49,6 +52,9 @@ public class Player {
 //			return 50;
 //		}
 //		maxBet += 2;
+		if (maxBet > 25) {
+			return 25;
+		}
 		return maxBet;
 	}
 
