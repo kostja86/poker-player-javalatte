@@ -10,11 +10,13 @@ public class Player {
 
     public static int betRequest(JsonElement request) {
     	System.err.println("betRequest: " +  request.toString());
+    	System.out.println("betRequest: " +  request.toString());
         return 200;
     }
 
     public static void showdown(JsonElement game) {
 
     	System.err.println("showdown: " +  game.toString());
+    	System.out.println("showdown: " +  game.toString());
     }
 }
