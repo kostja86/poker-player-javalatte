@@ -45,6 +45,7 @@ public class Player {
 	public static int betRequest(JsonElement request) {
 		JsonObject jObj = request.getAsJsonObject();
 		JsonArray players = jObj.get("players").getAsJsonArray();
+		maxBet = 0;
 		holeCards = new ArrayList<>();
 		setMaxBetAndActualStack(players);
 		setHoleCards(players);
