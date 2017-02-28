@@ -2,6 +2,7 @@ package org.leanpoker.player;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class Player {
 
@@ -27,25 +28,31 @@ public class Player {
 	 * @return
 	 */
 	public static int betRequest(JsonElement request) {
-		JsonArray jsonArray;
-		if (request.isJsonArray()) {
-			jsonArray = request.getAsJsonArray();
-			for (int i = 0; i < jsonArray.size(); i++) {
-				System.out.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
-				System.err.println("betRequest: " + i + ": " + jsonArray.get(i).toString());
+		JsonObject jObj = request.getAsJsonObject();
+		JsonArray players = jObj.get("players").getAsJsonArray();
+		int maxBet = 0;
+		for(int i = 0; i < players.size(); i++) {
+			JsonElement plEl = players.get(i);
+			int actualBet = plEl.getAsJsonObject().get("bet").getAsInt();
+			if (actualBet > maxBet) {
+				maxBet = actualBet;
 			}
 		}
 		
 		
-		System.err.println("betRequest: " + request.toString());
-		System.out.println("betRequest: " + request.toString());
-		
-		return 350;
+//		System.err.println("betRequest: " + request.toString());
+//		System.out.println("betRequest: " + request.toString());
+		if (maxBet >= 500) {
+			return 500;
+		}
+		maxBet += 2;
+		return maxBet;
 	}
 
 	/**
 	 * showdown:
-	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54bb580f878000400003f","round":21,"players":[{"name":"PokerFarce","stack":936,"status":"folded","bet":0,"time_used":349441,"version":"Default
+	 * {"tournament_id":"58b538ab8835920004000021","game_id":"58b54bb580f878000400003f","round":21,
+	 * "players":[{"name":"PokerFarce","stack":936,"status":"folded","bet":0,"time_used":349441,"version":"Default
 	 * TypeScript folding
 	 * player","id":0},{"name":"JavaLatte","stack":0,"status":"out","bet":0,"hole_cards":[],"time_used":87233,"version":"Default
 	 * Java folding player","id":1},{"name":"Java Master Race
@@ -55,7 +62,8 @@ public class Player {
 	 * C# folding player","id":3},{"name":"still mono
 	 * noobs","stack":0,"status":"out","bet":0,"time_used":31780,"version":"Default
 	 * C# folding
-	 * player","id":4}],"small_blind":5,"big_blind":10,"orbits":4,"dealer":3,"community_cards":[{"rank":"6","suit":"clubs"},{"rank":"3","suit":"spades"},{"rank":"K","suit":"clubs"},{"rank":"9","suit":"clubs"},{"rank":"9","suit":"hearts"}],"current_buy_in":0,"pot":0}
+	 * player","id":4}],
+	 * "small_blind":5,"big_blind":10,"orbits":4,"dealer":3,"community_cards":[{"rank":"6","suit":"clubs"},{"rank":"3","suit":"spades"},{"rank":"K","suit":"clubs"},{"rank":"9","suit":"clubs"},{"rank":"9","suit":"hearts"}],"current_buy_in":0,"pot":0}
 	 * 
 	 * @param game
 	 */
