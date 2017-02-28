@@ -40,7 +40,7 @@ public class Player {
 		System.err.println("betRequest: " + request.toString());
 		System.out.println("betRequest: " + request.toString());
 		
-		return 950;
+		return 350;
 	}
 
 	/**
