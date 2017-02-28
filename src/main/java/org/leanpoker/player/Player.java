@@ -61,7 +61,7 @@ public class Player {
 //			return 50;
 //		}
 //		maxBet += 2;
-		if (hasPair() || hasHighCard()) {
+		if (hasPair() || hasHighCard() || hasAtLeastOnePair()) {
 			return maxBet;
 		}
 		return 0;
@@ -69,6 +69,24 @@ public class Player {
 	
 	private static boolean hasPair() {
 		return holeCards.get(0).equals(holeCards.get(1));
+	}
+	
+	private static boolean hasAtLeastOnePair() {
+		List<JsonCard> allCards = new ArrayList<>();
+		allCards.addAll(holeCards);
+		allCards.addAll(communityCards);
+		
+		int numberOfMatches = 0;
+		
+		for (int i = 0; i < allCards.size(); i++) {
+			for (int j = 0; j < allCards.size(); j++) {
+				if (i != j && allCards.get(i).equals(allCards.get(j))) {
+					numberOfMatches++;
+				}
+			}
+		}
+		
+		return numberOfMatches >= 2;
 	}
 	
 	private static boolean hasHighCard() {
