@@ -46,6 +46,7 @@ public class Player {
 		JsonObject jObj = request.getAsJsonObject();
 		JsonArray players = jObj.get("players").getAsJsonArray();
 		maxBet = 0;
+		stack = 0;
 		holeCards = new ArrayList<>();
 		setMaxBetAndActualStack(players);
 		setHoleCards(players);
@@ -53,21 +54,32 @@ public class Player {
 		
 		setCommunityCards(jObj.get("community_cards").getAsJsonArray());
 		
+		int numberOfCards = holeCards.size() + communityCards.size();
+		boolean flopPlayed = numberOfCards > 2;
 		
+		int bet = 0;
 		
-//		System.err.println("betRequest: " + request.toString());
-//		System.out.println("betRequest: " + request.toString());
-		
-//		if (maxBet >= 50) {
-//			return 50;
-//		}
-//		maxBet += 2;
+		boolean hasMatch = false;
 		if (hasPair() || hasHighCard() || hasAtLeastOnePair()) {
-			return maxBet;
+			hasMatch = true;
+			bet = maxBet;
 		}
-		return 0;
+		
+		if (!hasMatch && !flopPlayed) {
+			bet = getBet(0.1);
+		}
+		
+		return bet;
 	}
 	
+	private static int getBet(double factor) {
+		int bet = (int) (stack * 0.1);
+		if (stack * factor >= maxBet) {
+			bet = maxBet;
+		}
+		return bet;
+	}
+
 	private static boolean hasPair() {
 		return holeCards.get(0).equals(holeCards.get(1));
 	}
